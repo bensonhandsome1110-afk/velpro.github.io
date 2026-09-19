@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>林帛緯 — CS203A 學習筆記</title>
+<meta name="description" content="林帛緯的個人首頁與 CS203A 資料結構課程學習筆記">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #f6f3ec;
+    --paper-line: #ded7c6;
+    --ink: #1f2733;
+    --ink-soft: #55606d;
+    --teal: #2b6e68;
+    --amber: #b8863b;
+    --card: #fdfcf9;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection{ background: var(--teal); color: var(--paper); }
+
+  a{ color: var(--teal); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:hover{ color: var(--amber); }
+
+  .wrap{
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  header.hero{
+    padding: 88px 0 56px;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .tag{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+    margin: 0 0 18px;
+  }
+
+  h1{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    line-height: 1.15;
+    margin: 0 0 14px;
+  }
+
+  .hero p.lede{
+    font-size: 1.08rem;
+    color: var(--ink-soft);
+    max-width: 46ch;
+    margin: 0 0 20px;
+  }
+
+  .hero-links{
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+  }
+
+  section{
+    padding: 52px 0;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  section:last-of-type{ border-bottom: none; }
+
+  h2{
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.5rem;
+    margin: 0 0 24px;
+    color: var(--ink);
+  }
+
+  .about p{ max-width: 60ch; color: var(--ink-soft); }
+  .about p + p{ margin-top: 14px; }
+
+  /* Course log entries */
+  .entry{
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 3px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+
+  .entry summary{
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 92px 1fr auto;
+    gap: 14px;
+    align-items: baseline;
+  }
+
+  .entry summary::-webkit-details-marker{ display:none; }
+
+  .entry .date{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--teal);
+    white-space: nowrap;
+  }
+
+  .entry .title{
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+
+  .entry .caret{
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink-soft);
+    transition: transform 0.15s ease;
+    font-size: 0.85rem;
+  }
+
+  .entry[open] .caret{ transform: rotate(90deg); }
+
+  .entry .body{
+    padding: 0 20px 20px 20px;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--paper-line);
+    margin-top: 2px;
+    padding-top: 16px;
+  }
+
+  .entry .body p{ margin: 0 0 12px; }
+  .entry .body p:last-child{ margin-bottom: 0; }
+
+  .entry .body ul{ margin: 0 0 12px; padding-left: 20px; }
+
+  .add-note{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    border: 1px dashed var(--paper-line);
+    border-radius: 3px;
+    padding: 14px 18px;
+    margin-top: 8px;
+  }
+
+  /* Projects */
+  .projects{
+    display: grid;
+    gap: 14px;
+  }
+
+  .project{
+    border: 1px solid var(--paper-line);
+    background: var(--card);
+    border-radius: 3px;
+    padding: 16px 20px;
+  }
+
+  .project .name{
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+
+  .project .desc{
+    color: var(--ink-soft);
+    font-size: 0.94rem;
+    margin: 0;
+  }
+
+  /* Contact */
+  .contact-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .contact-list li{
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 12px;
+    font-size: 0.98rem;
+  }
+
+  .contact-list .label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    padding-top: 2px;
+  }
+
+  footer{
+    padding: 40px 0 60px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 520px){
+    .entry summary{ grid-template-columns: 1fr auto; }
+    .entry .date{ grid-column: 1 / -1; }
+    .contact-list li{ grid-template-columns: 1fr; gap: 2px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    .entry .caret{ transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="tag">11501_CS203A · 課程學習筆記</p>
+    <h1>林帛緯</h1>
+    <p class="lede">資訊工程相關領域學生，正在透過 CS203A 這門課練習寫程式、用 Git 記錄學習過程，也順便學怎麼把想法做成看得見的東西。</p>
+    <div class="hero-links">
+      <a href="https://github.com/velpro" target="_blank" rel="noopener">github.com/velpro</a>
+      <a href="https://github.com/velpro/11501_CS203A" target="_blank" rel="noopener">課程 repo</a>
+      <a href="#contact">聯絡方式</a>
+    </div>
+  </header>
+
+  <section class="about" id="about">
+    <h2>關於我</h2>
+    <p>學號 1143312。目前在學習資訊工程 / 程式設計相關課程，對於把課堂上學到的東西實際動手做出來特別有興趣。這個網站是我在 CS203A 課程中建立的個人首頁，也是我練習 GitHub、Markdown 與網頁基礎的第一步。</p>
+    <p>之後會持續把課程中的練習、心得整理成下方的學習日誌，也會放上一些自己動手做的小專案。</p>
+  </section>
+
+  <section class="log" id="log">
+    <h2>課程學習日誌</h2>
+
+    <details class="entry" open>
+      <summary>
+        <span class="date">2026-09-19</span>
+        <span class="title">開始這門課：建立 GitHub 帳號與 Repository</span>
+        <span class="caret">▸</span>
+      </summary>
+      <div class="body">
+        <p>這是 CS203A Assignment I 的紀錄。今天完成了幾件事：</p>
+        <ul>
+          <li>建立 GitHub 帳號，使用者名稱 <code>velpro</code>。</li>
+          <li>建立課程 repository <code>11501_CS203A</code>，寫了第一版 README.md。</li>
+          <li>建立個人網頁 repository <code>velpro.github.io</code>，並啟用 GitHub Pages，也就是你現在看到的這個頁面。</li>
+        </ul>
+        <p>學到的東西：GitHub repository 跟資料夾很像，但多了版本紀錄；README.md 用 Markdown 寫，可以控制標題、清單、連結怎麼呈現；GitHub Pages 可以直接把 repository 變成一個網站，網址就是 <code>username.github.io</code>。</p>
+      </div>
+    </details>
+
+    <!--
+      之後要新增文章時，
+      複製上面整段 <details class="entry"> ... </details>，
+      貼在這一行下面，改掉日期(date)、標題(title)跟內文(body)裡的文字就好。
+    -->
+
+    <p class="add-note">// 之後每完成一次課程作業或練習，就在上面新增一則日誌條目，記錄日期、學到了什麼、卡在哪裡、怎麼解決的。</p>
+  </section>
+
+  <section class="projects" id="projects">
+    <h2>其他專案</h2>
+    <div class="projects">
+      <div class="project">
+        <p class="name">11501_CS203A</p>
+        <p class="desc">CS203A 課程作業與練習紀錄。<a href="https://github.com/velpro/11501_CS203A" target="_blank" rel="noopener">前往 repository →</a></p>
+      </div>
+      <div class="project">
+        <p class="name">專案名稱</p>
+        <p class="desc">簡短說明這個專案在做什麼，並附上 GitHub repository 的連結。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <h2>聯絡方式</h2>
+    <ul class="contact-list">
+      <li><span class="label">GitHub</span><span><a href="https://github.com/velpro" target="_blank" rel="noopener">github.com/velpro</a></span></li>
+      <li><span class="label">Email</span><span><a href="mailto:your-email@example.com">bensonhandsome1110@gamil.com</a></span></li>
+      <li><span class="label">學校</span><span>元智大學 Yuan Ze University</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    © 2026 林帛緯 · Built for CS203A, updated as the course goes on.
+  </footer>
+
+</div>
+
+</body>
+</html>
